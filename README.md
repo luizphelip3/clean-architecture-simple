@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This project is for study only. It consists in a simple social media scope to practice Clean Architecture and SOLID concepts.
 
 ## Installation
 

@@ -5,6 +5,7 @@ import { ChangePasswordUserUseCase } from './use-cases/change-password-user.use-
 import { CreateUserUseCase } from './use-cases/create-user.use-case';
 import { FindAllUserUseCase } from './use-cases/find-all-user.use-case';
 import { UserWithUseCaseController } from './user-with-use-case.controller';
+import { UserTypeOrmRepository } from './user.repository';
 import { UserService } from './user.service';
 
 @Module({
@@ -18,6 +19,11 @@ import { UserService } from './user.service';
     CreateUserUseCase,
     FindAllUserUseCase,
     ChangePasswordUserUseCase,
+    UserTypeOrmRepository,
+    {
+      provide: 'IUserRepository',
+      useExisting: UserTypeOrmRepository,
+    },
   ],
 })
 export class UserModule {}

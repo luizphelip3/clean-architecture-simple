@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
+import { User } from '../entities/user.entity';
 
 export interface IUserRepository {
-  create(user: CreateUserDto): Promise<void>;
+  create(user: User): Promise<void>;
 
   update(user: User): Promise<void>;
 
@@ -21,7 +20,7 @@ export class UserTypeOrmRepository implements IUserRepository {
     private typeOrmRepository: Repository<User>,
   ) {}
 
-  async create(user: CreateUserDto): Promise<void> {
+  async create(user: User): Promise<void> {
     await this.typeOrmRepository.save(user);
   }
 

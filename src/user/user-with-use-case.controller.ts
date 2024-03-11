@@ -1,46 +1,40 @@
-import {
-  Body,
-  ClassSerializerInterceptor,
-  Controller,
-  Get,
-  Post,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { ChangePasswordUserUseCaseDto } from './dto/change-password-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entities/user.entity';
+import { ChangePasswordUserUseCase } from './use-cases/change-password-user.use-case';
 import { CreateUserUseCase } from './use-cases/create-user.use-case';
 import { FindAllUserUseCase } from './use-cases/find-all-user.use-case';
 
 @Controller('user')
 export class UserWithUseCaseController {
-  constructor(
-    private readonly createUserUseCase: CreateUserUseCase,
-    private readonly findAllUserUseCase: FindAllUserUseCase,
-  ) {}
+  @Inject(CreateUserUseCase)
+  private readonly createUserUseCase: CreateUserUseCase;
+
+  @Inject(FindAllUserUseCase)
+  private readonly findAllUserUseCase: FindAllUserUseCase;
+
+  @Inject(ChangePasswordUserUseCase)
+  private readonly changePasswordUserUseCase: ChangePasswordUserUseCase;
 
   @Post()
-  @UseInterceptors(ClassSerializerInterceptor)
-  create(@Body() createUserDto: CreateUserDto) {
+  create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.createUserUseCase.execute(createUserDto);
   }
 
   @Get()
-  findAll() {
+  findAll(): Promise<User[]> {
     return this.findAllUserUseCase.execute();
   }
 
-  //   @Get(':id')
-  //   findOne(@Param('id') id: string) {
-  //     return this.userService.findOne(id);
-  //   }
-
-  //   @Patch(':id')
-  //   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //     console.log(id);
-  //     return await this.userService.update(id, updateUserDto);
-  //   }
-
-  //   @Delete(':id')
-  //   delete(@Param('id') id: string) {
-  //     return this.userService.delete(id);
-  //   }
+  @Post('/:id/change-password')
+  async changePassword(
+    @Param('id') id: string,
+    @Body() changePasswordUserUseCaseDto: ChangePasswordUserUseCaseDto,
+  ) {
+    return await this.changePasswordUserUseCase.execute(
+      id,
+      changePasswordUserUseCaseDto,
+    );
+  }
 }

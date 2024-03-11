@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ChangePasswordUserUseCaseDto } from '../dto/change-password-user.dto';
@@ -14,24 +10,15 @@ export class ChangePasswordUserUseCase {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
-  async execute({ id, password }: ChangePasswordUserUseCaseDto) {
-    const user = await this.userRepository.findOne({ where: { id } });
 
-    if (!user) {
-      throw new NotFoundException();
-    }
+  async execute(
+    id: string,
+    { oldPassword, newPassword }: ChangePasswordUserUseCaseDto,
+  ) {
+    const user = await this.userRepository.findOneOrFail({ where: { id } });
 
-    if (password === user.password) {
-      throw new BadRequestException({
-        message: 'This password is already in use',
-      });
-    }
+    user.changePassword(oldPassword, newPassword);
 
-    const updatedUser = await this.userRepository.update(
-      { id },
-      { ...user, password: password },
-    );
-
-    return updatedUser.raw;
+    return await this.userRepository.save(user);
   }
 }

@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
+import { ChangePasswordUserUseCase } from './use-cases/change-password-user.use-case';
 import { CreateUserUseCase } from './use-cases/create-user.use-case';
+import { FindAllUserUseCase } from './use-cases/find-all-user.use-case';
 import { UserWithUseCaseController } from './user-with-use-case.controller';
 import { UserService } from './user.service';
-import { FindAllUserUseCase } from './use-cases/find-all-user.use-case';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
@@ -12,6 +13,11 @@ import { FindAllUserUseCase } from './use-cases/find-all-user.use-case';
     // UserController,
     UserWithUseCaseController,
   ],
-  providers: [UserService, CreateUserUseCase, FindAllUserUseCase],
+  providers: [
+    UserService,
+    CreateUserUseCase,
+    FindAllUserUseCase,
+    ChangePasswordUserUseCase,
+  ],
 })
 export class UserModule {}

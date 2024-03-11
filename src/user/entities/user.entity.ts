@@ -5,8 +5,10 @@ import {
   DeleteDateColumn,
   Entity,
   PrimaryColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
+import { BadRequestException } from '@nestjs/common';
 import crypto from 'crypto';
 
 @Entity()
@@ -27,15 +29,15 @@ export class User {
   @Column({ name: 'phone', nullable: true, unique: true })
   phone?: string;
 
-  @Column({ name: 'private', default: false })
-  private: boolean;
+  @Column({ name: 'is_private', default: false })
+  isPrivate: boolean;
 
   @CreateDateColumn({
     name: 'created_at',
   })
   createdAt: Date;
 
-  @Column({ name: 'updated_at', nullable: true })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt?: Date;
 
   @DeleteDateColumn({ name: 'deleted_at', nullable: true })
@@ -53,5 +55,21 @@ export class User {
   ) {
     Object.assign(this, props);
     this.id = id ?? crypto.randomUUID();
+  }
+
+  changePassword(oldPassword: string, newPassword: string) {
+    if (oldPassword !== this.password) {
+      throw new BadRequestException({
+        message: 'The old password is wrong.',
+      });
+    }
+
+    if (newPassword === this.password) {
+      throw new BadRequestException({
+        message: 'The new password should be different',
+      });
+    }
+
+    this.password = newPassword;
   }
 }

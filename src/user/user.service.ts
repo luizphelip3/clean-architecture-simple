@@ -1,5 +1,4 @@
 import {
-  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -17,7 +16,7 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
-  async create(createUserDto: CreateUserDto): Promise<User | HttpException> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const user = new User(createUserDto);
 
     try {

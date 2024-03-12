@@ -1,17 +1,17 @@
 import { IUserRepository } from '../../../../infra/repository/user.repository';
 import { FindAllUserUseCase } from '../find-all-user.use-case';
 import {
-  mockCreateTestModule,
+  mockFindAllUserUseCaseTestModule,
   mockUsersArray,
   mockUsersArrayEmpty,
-} from './mocks/find-all-user-use-case.mock';
+} from './mocks/find-all-user-use-case.mock.spec';
 
 describe('FindAllUserUseCase', () => {
   let findAllUserUseCase: FindAllUserUseCase;
   let mockUserRepository: IUserRepository;
 
   beforeEach(async () => {
-    const moduleRef = await mockCreateTestModule();
+    const moduleRef = await mockFindAllUserUseCaseTestModule();
 
     findAllUserUseCase = moduleRef.get<FindAllUserUseCase>(FindAllUserUseCase);
     mockUserRepository = moduleRef.get<IUserRepository>('IUserRepository');

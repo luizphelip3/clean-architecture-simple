@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FindAllUserUseCase } from '../../find-all-user.use-case';
 
-export async function mockCreateTestModule(): Promise<TestingModule> {
+export async function mockFindAllUserUseCaseTestModule(): Promise<TestingModule> {
   return await Test.createTestingModule({
     providers: [
       FindAllUserUseCase,

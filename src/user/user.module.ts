@@ -4,7 +4,7 @@ import { ChangePasswordUserUseCase } from './application/use-cases/change-passwo
 import { CreateUserUseCase } from './application/use-cases/create-user/create-user.use-case';
 import { FindAllUserUseCase } from './application/use-cases/find-all-user/find-all-user.use-case';
 import { UserWithUseCaseController } from './domain/controller/user.controller';
-import { User } from './domain/entity/user.entity';
+import { User } from './infra/entity/user.entity';
 import { UserTypeOrmRepository } from './infra/repository/user.repository';
 
 @Module({

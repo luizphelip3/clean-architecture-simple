@@ -4,7 +4,7 @@ import {
   mockFindAllUserUseCaseTestModule,
   mockUsersArray,
   mockUsersArrayEmpty,
-} from './mocks/find-all-user-use-case.mock.spec';
+} from './mocks/find-all-user-use-case.mock';
 
 describe('FindAllUserUseCase', () => {
   let findAllUserUseCase: FindAllUserUseCase;

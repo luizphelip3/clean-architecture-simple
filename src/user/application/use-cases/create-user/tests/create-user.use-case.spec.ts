@@ -7,7 +7,7 @@ import {
   mockEmailUniqueErrorWhileCreateUserResult,
   mockGenericErrorWhileCreateUserResult,
   mockPhoneUniqueErrorWhileCreateUserResult,
-} from './mocks/create-user-use-case.mock.spec';
+} from './mocks/create-user-use-case.mock';
 
 describe('CreateUserUseCase', () => {
   let createUserUseCase: CreateUserUseCase;

@@ -4,7 +4,7 @@ import { ChangePasswordUserUseCaseDto } from '../../application/use-cases/change
 import { CreateUserUseCase } from '../../application/use-cases/create-user/create-user.use-case';
 import { CreateUserRequestDto } from '../../application/use-cases/create-user/dto/create-user.dto';
 import { FindAllUserUseCase } from '../../application/use-cases/find-all-user/find-all-user.use-case';
-import { User } from '../entity/user.entity';
+import { User } from '../../infra/entity/user.entity';
 
 @Controller('user')
 export class UserWithUseCaseController {

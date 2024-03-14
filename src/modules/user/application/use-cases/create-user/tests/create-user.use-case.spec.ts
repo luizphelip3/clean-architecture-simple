@@ -20,7 +20,7 @@ describe('CreateUserUseCase', () => {
     mockUserRepository = moduleRef.get<IUserRepository>('IUserRepository');
   });
 
-  it('should call create method at user repository method', async () => {
+  it('should call create method at user repository', async () => {
     await createUserUseCase.execute(mockCreateUserParams);
     expect(mockUserRepository.create).toHaveBeenCalled();
   });

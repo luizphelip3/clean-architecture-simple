@@ -1,9 +1,9 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entity/user.entity';
 
@@ -20,13 +20,13 @@ export interface IUserRepository {
 @Injectable()
 export class UserTypeOrmRepository implements IUserRepository {
   constructor(
-    @InjectRepository(User)
-    private typeOrmRepository: Repository<User>,
+    @Inject('USER_REPOSITORY')
+    private userTypeOrmRepository: Repository<User>,
   ) {}
 
   async create(user: User): Promise<User> {
     try {
-      return await this.typeOrmRepository.save(user);
+      return await this.userTypeOrmRepository.save(user);
     } catch (error) {
       const errorString = `${error}`;
       if (
@@ -48,14 +48,14 @@ export class UserTypeOrmRepository implements IUserRepository {
   }
 
   async update(user: User): Promise<void> {
-    await this.typeOrmRepository.update(user.id, user);
+    await this.userTypeOrmRepository.update(user.id, user);
   }
 
   async findAll(): Promise<User[]> {
-    return await this.typeOrmRepository.find();
+    return await this.userTypeOrmRepository.find();
   }
 
   async findById(id: string): Promise<User> {
-    return await this.typeOrmRepository.findOneOrFail({ where: { id } });
+    return await this.userTypeOrmRepository.findOneOrFail({ where: { id } });
   }
 }

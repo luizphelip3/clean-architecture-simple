@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ChangePasswordUserUseCase } from '../../application/use-cases/change-password-user/change-password-user.use-case';
 import { ChangePasswordUserUseCaseDto } from '../../application/use-cases/change-password-user/dto/change-password-user.dto';
 import { CreateUserUseCase } from '../../application/use-cases/create-user/create-user.use-case';
@@ -7,15 +7,12 @@ import { FindAllUserUseCase } from '../../application/use-cases/find-all-user/fi
 import { User } from '../../infra/entity/user.entity';
 
 @Controller('user')
-export class UserWithUseCaseController {
-  @Inject(CreateUserUseCase)
-  private readonly createUserUseCase: CreateUserUseCase;
-
-  @Inject(FindAllUserUseCase)
-  private readonly findAllUserUseCase: FindAllUserUseCase;
-
-  @Inject(ChangePasswordUserUseCase)
-  private readonly changePasswordUserUseCase: ChangePasswordUserUseCase;
+export class UserController {
+  constructor(
+    private readonly createUserUseCase: CreateUserUseCase,
+    private readonly findAllUserUseCase: FindAllUserUseCase,
+    private readonly changePasswordUserUseCase: ChangePasswordUserUseCase,
+  ) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserRequestDto): Promise<User> {
@@ -32,9 +29,9 @@ export class UserWithUseCaseController {
     @Param('id') id: string,
     @Body() changePasswordUserUseCaseDto: ChangePasswordUserUseCaseDto,
   ) {
-    return await this.changePasswordUserUseCase.execute(
+    return await this.changePasswordUserUseCase.execute({
+      ...changePasswordUserUseCaseDto,
       id,
-      changePasswordUserUseCaseDto,
-    );
+    });
   }
 }

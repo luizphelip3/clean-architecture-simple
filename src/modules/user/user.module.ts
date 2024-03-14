@@ -1,27 +1,21 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { DatabaseModule } from 'src/config/database/database.module';
 import { ChangePasswordUserUseCase } from './application/use-cases/change-password-user/change-password-user.use-case';
 import { CreateUserUseCase } from './application/use-cases/create-user/create-user.use-case';
 import { FindAllUserUseCase } from './application/use-cases/find-all-user/find-all-user.use-case';
-import { UserWithUseCaseController } from './domain/controller/user.controller';
-import { User } from './infra/entity/user.entity';
+import { UserController } from './domain/controller/user.controller';
 import { UserTypeOrmRepository } from './infra/repository/user.repository';
+import { userRepositoryProviders } from './infra/repository/user.repository.provider';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
-  controllers: [
-    // UserController,
-    UserWithUseCaseController,
-  ],
+  imports: [DatabaseModule],
+  controllers: [UserController],
   providers: [
     CreateUserUseCase,
     FindAllUserUseCase,
     ChangePasswordUserUseCase,
     UserTypeOrmRepository,
-    {
-      provide: 'IUserRepository',
-      useExisting: UserTypeOrmRepository,
-    },
+    ...userRepositoryProviders,
   ],
 })
 export class UserModule {}

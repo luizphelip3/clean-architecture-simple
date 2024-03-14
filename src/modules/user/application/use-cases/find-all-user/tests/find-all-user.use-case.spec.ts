@@ -22,7 +22,7 @@ describe('FindAllUserUseCase', () => {
     expect(mockUserRepository.findAll).toHaveBeenCalled();
   });
 
-  it('should return the result from findAll method', async () => {
+  it('should return the result from findAll repository method', async () => {
     const expectedResult = mockUsersArray;
     (mockUserRepository.findAll as jest.Mock).mockResolvedValue(expectedResult);
 
@@ -30,7 +30,7 @@ describe('FindAllUserUseCase', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  it('should return an empty array if there is nothing in database search', async () => {
+  it('should return an empty array if findAll repository method returns nothing', async () => {
     const expectedResult = mockUsersArrayEmpty;
 
     (mockUserRepository.findAll as jest.Mock).mockResolvedValue(expectedResult);

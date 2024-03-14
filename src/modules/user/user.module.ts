@@ -5,7 +5,7 @@ import { CreateUserUseCase } from './application/use-cases/create-user/create-us
 import { FindAllUserUseCase } from './application/use-cases/find-all-user/find-all-user.use-case';
 import { UserController } from './domain/controller/user.controller';
 import { UserTypeOrmRepository } from './infra/repository/user.repository';
-import { userRepositoryProviders } from './infra/repository/user.repository.provider';
+import { userRepositoryProviders } from './infra/repository/provider/user.repository.provider';
 
 @Module({
   imports: [DatabaseModule],

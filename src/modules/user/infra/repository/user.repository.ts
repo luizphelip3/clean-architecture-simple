@@ -1,5 +1,5 @@
+import { validateUserUniqueConstraint } from '@modules/user/application/utils/unique-constraint-validation';
 import {
-  BadRequestException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -28,27 +28,20 @@ export class UserTypeOrmRepository implements IUserRepository {
     try {
       return await this.userTypeOrmRepository.save(user);
     } catch (error) {
-      const errorString = `${error}`;
-      if (
-        errorString.includes('UNIQUE') &&
-        errorString.includes('user.phone')
-      ) {
-        throw new BadRequestException('This phone is already beaing used.');
-      }
-
-      if (
-        errorString.includes('UNIQUE') &&
-        errorString.includes('user.email')
-      ) {
-        throw new BadRequestException('This email is already beaing used.');
-      }
+      await validateUserUniqueConstraint(error);
 
       throw new InternalServerErrorException('Could not create user.');
     }
   }
 
   async update(user: User): Promise<void> {
-    await this.userTypeOrmRepository.update(user.id, user);
+    try {
+      await this.userTypeOrmRepository.update(user.id, user);
+    } catch (error) {
+      await validateUserUniqueConstraint(error);
+
+      throw new InternalServerErrorException('Could not update user.');
+    }
   }
 
   async findAll(): Promise<User[]> {

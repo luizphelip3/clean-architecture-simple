@@ -1,5 +1,5 @@
 ## Description
-### This project is for study only. It consists in a simple user scope to practice Clean Architecture and SOLID concepts.
+### This project is for study only. It consists in a simple social media scope to practice Clean Architecture, DDD and SOLID concepts.
 
 ## Installation
 

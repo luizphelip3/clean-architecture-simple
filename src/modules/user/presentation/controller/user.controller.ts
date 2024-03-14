@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ChangePasswordUserUseCase } from '../../application/use-cases/change-password-user/change-password-user.use-case';
 import { CreateUserUseCase } from '../../application/use-cases/create-user/create-user.use-case';
 import { FindAllUserUseCase } from '../../application/use-cases/find-all-user/find-all-user.use-case';
-import { User } from '../../infra/entity/user.entity';
+import { User } from '../../domain/entity/user.entity';
 import { ChangePasswordUserRequestDTO } from '../adapter/change-password-request.adapter';
 import { CreateUserRequestDTO } from '../adapter/create-user-request.adapter';
 

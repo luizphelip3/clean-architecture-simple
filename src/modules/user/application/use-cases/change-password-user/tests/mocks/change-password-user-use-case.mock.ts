@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { User } from '../../../../../infra/entity/user.entity';
+import { User } from '../../../../../domain/entity/user.entity';
 import { ChangePasswordUserUseCase } from '../../change-password-user.use-case';
 
 export async function mockChangePasswordUserUseCaseTestModule(): Promise<TestingModule> {

@@ -5,7 +5,7 @@ import {
   DB_PGSQL_PORT,
   DB_PGSQL_USERNAME,
 } from '@config/env/env.config';
-import { User } from '@modules/user/infra/entity/user.entity';
+import { User } from '@modules/user/domain/entity/user.entity';
 import { DataSource } from 'typeorm';
 
 export const databaseProviders = [

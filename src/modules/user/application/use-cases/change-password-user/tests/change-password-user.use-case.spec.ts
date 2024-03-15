@@ -1,46 +1,72 @@
-import { User } from '@modules/user/domain/entity/user.entity';
-import { IUserRepository } from '../../../../infra/repository/user.repository';
+import { UserTypeOrmRepository } from '@modules/user/infra/repository/user.repository';
 import { ChangePasswordUserUseCase } from '../change-password-user.use-case';
 import {
   mockChangePassswordUserParams,
   mockChangePasswordUserUseCaseTestModule,
-  // mockCreateUserResult,
-  // mockEmailUniqueErrorWhileCreateUserResult,
-  // mockGenericErrorWhileCreateUserResult,
-  // mockPhoneUniqueErrorWhileCreateUserResult,
+  mockOldPasswordErrorWhileChangePasswordUserResult,
+  mockUser,
   mockUserFindById,
+  mockWrongNewPasswordToChangePassswordUserParams,
   mockWrongOldPasswordToChangePassswordUserParams,
 } from './mocks/change-password-user-use-case.mock';
 
 describe('ChangePasswordUserUseCase', () => {
-  let changePasswordUserUseCase: ChangePasswordUserUseCase;
-  let mockUserRepository: IUserRepository;
-  let userEntity: User;
+  let sut: ChangePasswordUserUseCase;
+  let mockUserRepository: UserTypeOrmRepository;
 
   beforeEach(async () => {
     const moduleRef = await mockChangePasswordUserUseCaseTestModule();
 
-    changePasswordUserUseCase = moduleRef.get<ChangePasswordUserUseCase>(
-      ChangePasswordUserUseCase,
+    sut = moduleRef.get<ChangePasswordUserUseCase>(ChangePasswordUserUseCase);
+    mockUserRepository = moduleRef.get<UserTypeOrmRepository>(
+      UserTypeOrmRepository,
     );
-    mockUserRepository = moduleRef.get<IUserRepository>('IUserRepository');
   });
 
   it('should call findById and update method at user repository', async () => {
-    await changePasswordUserUseCase.execute(mockChangePassswordUserParams);
-    expect(mockUserRepository.findById).toHaveBeenCalled();
-    expect(mockUserRepository.update).toHaveBeenCalled();
+    await sut.execute(mockChangePassswordUserParams);
+    expect(mockUserRepository.findById).toHaveBeenCalledTimes(1);
+    expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
   });
 
   it('should not call update method at user repository if oldPassword is not equal to actual user password', async () => {
-    (mockUserRepository.findById as jest.Mock).mockResolvedValue(
-      mockUserFindById,
-    );
-    await changePasswordUserUseCase.execute(
-      mockWrongOldPasswordToChangePassswordUserParams,
-    );
-    expect(userEntity.changePassword).toThrow();
-    expect(mockUserRepository.update).toHaveBeenCalledTimes(0);
+    jest
+      .spyOn(mockUserRepository, 'findById')
+      .mockResolvedValue(mockUserFindById);
+
+    await expect(
+      sut.execute(
+        mockWrongOldPasswordToChangePassswordUserParams,
+      ) as Promise<any>,
+    ).rejects.toThrow('The old password is wrong.');
+
+    expect(mockUserRepository.findById).toHaveBeenCalled();
+
+    jest.spyOn(mockUser, 'changePassword').mockImplementation(() => {
+      throw mockOldPasswordErrorWhileChangePasswordUserResult;
+    });
+
+    expect(mockUserRepository.update).not.toHaveBeenCalled();
+  });
+
+  it('should not call update method at user repository if newPassword equal to actual user password', async () => {
+    jest
+      .spyOn(mockUserRepository, 'findById')
+      .mockResolvedValue(mockUserFindById);
+
+    await expect(
+      sut.execute(
+        mockWrongNewPasswordToChangePassswordUserParams,
+      ) as Promise<any>,
+    ).rejects.toThrow('The new password should be different.');
+
+    expect(mockUserRepository.findById).toHaveBeenCalled();
+
+    jest.spyOn(mockUser, 'changePassword').mockImplementation(() => {
+      throw mockWrongNewPasswordToChangePassswordUserParams;
+    });
+
+    expect(mockUserRepository.update).not.toHaveBeenCalled();
   });
 
   // it('should return the result from create at user repository method', async () => {

@@ -1,5 +1,10 @@
+import { User } from '@modules/user/domain/entity/user.entity';
+import { UserTypeOrmRepository } from '@modules/user/infra/repository/user.repository';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { User } from '../../../../../domain/entity/user.entity';
 import { ChangePasswordUserUseCase } from '../../change-password-user.use-case';
 
 export async function mockChangePasswordUserUseCaseTestModule(): Promise<TestingModule> {
@@ -7,15 +12,13 @@ export async function mockChangePasswordUserUseCaseTestModule(): Promise<Testing
     providers: [
       ChangePasswordUserUseCase,
       {
-        provide: 'IUserRepository',
+        provide: UserTypeOrmRepository,
         useValue: {
-          findById: jest.fn(),
+          findById: jest.fn().mockResolvedValue(mockUserFindById),
           update: jest.fn(),
         },
       },
-      User,
     ],
-    imports: [User],
   }).compile();
 }
 
@@ -37,14 +40,21 @@ export const mockWrongNewPasswordToChangePassswordUserParams = {
   newPassword: 'password123',
 };
 
-export const mockUserFindById = {
-  id: 'b4beacf5-106b-487f-a7ce-4a31dcfaad62',
+export const mockUserFindById = new User({
   name: 'Luiz Phelipe',
   email: 'luiz.teste@teste.com',
   phone: '77 998363649',
   password: 'password123',
   isPrivate: false,
-  createdAt: '2024-03-12T15:50:48.000Z',
-  updatedAt: '2024-03-12T15:50:48.000Z',
-  deletedAt: null,
-};
+});
+
+export const mockOldPasswordErrorWhileChangePasswordUserResult =
+  new BadRequestException('The old password is wrong.');
+
+export const mockNewPasswordErrorWhileChangePasswordUserResult =
+  new BadRequestException('The new password should be different.');
+
+export const mockGenericErrorWhileChangePasswordUserResult =
+  new InternalServerErrorException('Could not update user.');
+
+export const mockUser = new User(mockUserFindById);

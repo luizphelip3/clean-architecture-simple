@@ -54,15 +54,11 @@ export class User {
 
   changePassword(oldPassword: string, newPassword: string) {
     if (oldPassword !== this.password) {
-      throw new BadRequestException({
-        message: 'The old password is wrong.',
-      });
+      throw new BadRequestException('The old password is wrong.');
     }
 
     if (newPassword === this.password) {
-      throw new BadRequestException({
-        message: 'The new password should be different',
-      });
+      throw new BadRequestException('The new password should be different.');
     }
 
     this.password = newPassword;

@@ -1,4 +1,4 @@
-import { IUserRepository } from '../../../../infra/repository/user.repository';
+import { UserTypeOrmRepository } from '@modules/user/infra/repository/user.repository';
 import { FindAllUserUseCase } from '../find-all-user.use-case';
 import {
   mockFindAllUserUseCaseTestModule,
@@ -8,13 +8,15 @@ import {
 
 describe('FindAllUserUseCase', () => {
   let findAllUserUseCase: FindAllUserUseCase;
-  let mockUserRepository: IUserRepository;
+  let mockUserRepository: UserTypeOrmRepository;
 
   beforeEach(async () => {
     const moduleRef = await mockFindAllUserUseCaseTestModule();
 
     findAllUserUseCase = moduleRef.get<FindAllUserUseCase>(FindAllUserUseCase);
-    mockUserRepository = moduleRef.get<IUserRepository>('IUserRepository');
+    mockUserRepository = moduleRef.get<UserTypeOrmRepository>(
+      UserTypeOrmRepository,
+    );
   });
 
   it('should call findAll repository method', async () => {

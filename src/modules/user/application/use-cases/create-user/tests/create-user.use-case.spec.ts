@@ -1,8 +1,8 @@
-import { IUserRepository } from '../../../../infra/repository/user.repository';
+import { User } from '@modules/user/domain/entity/user.entity';
+import { UserTypeOrmRepository } from '@modules/user/infra/repository/user.repository';
 import { CreateUserUseCase } from '../create-user.use-case';
 import {
   mockCreateUserParams,
-  mockCreateUserResult,
   mockCreateUserUseCaseTestModule,
   mockEmailUniqueErrorWhileCreateUserResult,
   mockGenericErrorWhileCreateUserResult,
@@ -10,53 +10,68 @@ import {
 } from './mocks/create-user-use-case.mock';
 
 describe('CreateUserUseCase', () => {
-  let createUserUseCase: CreateUserUseCase;
-  let mockUserRepository: IUserRepository;
+  let useCase: CreateUserUseCase;
+  let userRepository: UserTypeOrmRepository;
 
   beforeEach(async () => {
-    const moduleRef = await mockCreateUserUseCaseTestModule();
-
-    createUserUseCase = moduleRef.get<CreateUserUseCase>(CreateUserUseCase);
-    mockUserRepository = moduleRef.get<IUserRepository>('IUserRepository');
+    const module = await mockCreateUserUseCaseTestModule();
+    useCase = module.get<CreateUserUseCase>(CreateUserUseCase);
+    userRepository = module.get<UserTypeOrmRepository>(UserTypeOrmRepository);
   });
 
-  it('should call create method at user repository', async () => {
-    await createUserUseCase.execute(mockCreateUserParams);
-    expect(mockUserRepository.create).toHaveBeenCalled();
+  it('should be defined', () => {
+    expect(useCase).toBeDefined();
   });
 
-  it('should return the result from create at user repository method', async () => {
-    const expectedResult = mockCreateUserResult;
-    (mockUserRepository.create as jest.Mock).mockResolvedValue(expectedResult);
+  describe('execute', () => {
+    it('should create a user and return as same as created in database', async () => {
+      const userToCreate = new User(mockCreateUserParams);
 
-    const result = await createUserUseCase.execute(mockCreateUserParams);
-    expect(result).toEqual(expectedResult);
-  });
+      jest.spyOn(userRepository, 'create').mockResolvedValue(userToCreate);
 
-  it('should return an error object if the sended email is already in use', async () => {
-    const expectedResult = mockEmailUniqueErrorWhileCreateUserResult;
+      const result = await useCase.execute(mockCreateUserParams);
 
-    (mockUserRepository.create as jest.Mock).mockResolvedValue(expectedResult);
+      expect(result).toEqual(userToCreate);
+      expect(userRepository.create).toHaveBeenCalledWith(userToCreate);
+    });
 
-    const result = await createUserUseCase.execute(mockCreateUserParams);
-    expect(result).toEqual(expectedResult);
-  });
+    it('should throw an error if user creation fails by email unique constraint', async () => {
+      const userToCreate = new User(mockCreateUserParams);
 
-  it('should return an error object if the sended phone is already in use', async () => {
-    const expectedResult = mockPhoneUniqueErrorWhileCreateUserResult;
+      jest
+        .spyOn(userRepository, 'create')
+        .mockRejectedValue(mockEmailUniqueErrorWhileCreateUserResult);
 
-    (mockUserRepository.create as jest.Mock).mockResolvedValue(expectedResult);
+      await expect(useCase.execute(mockCreateUserParams)).rejects.toThrow(
+        'This email is already beaing used.',
+      );
+      expect(userRepository.create).toHaveBeenCalledWith(userToCreate);
+    });
 
-    const result = await createUserUseCase.execute(mockCreateUserParams);
-    expect(result).toEqual(expectedResult);
-  });
+    it('should throw an error if user creation fails by phone unique constraint', async () => {
+      const userToCreate = new User(mockCreateUserParams);
 
-  it('should return an generic error object if there is some problem while creating data at database', async () => {
-    const expectedResult = mockGenericErrorWhileCreateUserResult;
+      jest
+        .spyOn(userRepository, 'create')
+        .mockRejectedValue(mockPhoneUniqueErrorWhileCreateUserResult);
 
-    (mockUserRepository.create as jest.Mock).mockResolvedValue(expectedResult);
+      await expect(useCase.execute(mockCreateUserParams)).rejects.toThrow(
+        'This phone is already beaing used.',
+      );
+      expect(userRepository.create).toHaveBeenCalledWith(userToCreate);
+    });
 
-    const result = await createUserUseCase.execute(mockCreateUserParams);
-    expect(result).toEqual(expectedResult);
+    it('should throw an error if user creation fails', async () => {
+      const userToCreate = new User(mockCreateUserParams);
+
+      jest
+        .spyOn(userRepository, 'create')
+        .mockRejectedValue(mockGenericErrorWhileCreateUserResult);
+
+      await expect(useCase.execute(mockCreateUserParams)).rejects.toThrow(
+        'Could not create user.',
+      );
+      expect(userRepository.create).toHaveBeenCalledWith(userToCreate);
+    });
   });
 });

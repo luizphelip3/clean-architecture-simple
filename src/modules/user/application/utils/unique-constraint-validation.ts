@@ -18,6 +18,6 @@ export async function validateUserUniqueConstraint(error: ErrorDTO) {
   }
 
   if (error.constraint === 'UQ_8e1f623798118e629b46a9e6299') {
-    throw new BadRequestException('This phone email is already beaing used.');
+    throw new BadRequestException('This phone is already beaing used.');
   }
 }

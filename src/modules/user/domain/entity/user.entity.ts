@@ -4,16 +4,15 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { BadRequestException } from '@nestjs/common';
-import crypto from 'crypto';
 
 @Entity()
 export class User {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ name: 'name' })
@@ -43,18 +42,14 @@ export class User {
   @DeleteDateColumn({ name: 'deleted_at', nullable: true })
   deletedAt?: Date;
 
-  constructor(
-    props: {
-      name: string;
-      email: string;
-      password: string;
-      phone?: string;
-      isPrivate: boolean;
-    },
-    id?: string,
-  ) {
+  constructor(props: {
+    name: string;
+    email: string;
+    password: string;
+    phone?: string;
+    isPrivate: boolean;
+  }) {
     Object.assign(this, props);
-    this.id = id ?? crypto.randomUUID();
   }
 
   changePassword(oldPassword: string, newPassword: string) {

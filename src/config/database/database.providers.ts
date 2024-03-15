@@ -21,7 +21,7 @@ export const databaseProviders = [
         database: DB_PGSQL_NAME,
         entities: [User],
         synchronize: true,
-        logging: true,
+        logging: false,
       });
 
       return dataSource.initialize();

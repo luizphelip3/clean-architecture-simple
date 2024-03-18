@@ -1,5 +1,5 @@
 export class ChangePasswordUserUseCaseDTO {
   id: string;
-  oldPassword: string;
+  actualPassword: string;
   newPassword: string;
 }

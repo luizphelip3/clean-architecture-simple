@@ -52,9 +52,9 @@ export class User {
     Object.assign(this, props);
   }
 
-  changePassword(oldPassword: string, newPassword: string) {
-    if (oldPassword !== this.password) {
-      throw new BadRequestException('The old password is wrong.');
+  changePassword(actualPassword: string, newPassword: string) {
+    if (actualPassword !== this.password) {
+      throw new BadRequestException('The actual password is wrong.');
     }
 
     if (newPassword === this.password) {

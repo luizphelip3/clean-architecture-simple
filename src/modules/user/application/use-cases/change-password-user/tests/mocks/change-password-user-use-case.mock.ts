@@ -24,19 +24,19 @@ export async function mockChangePasswordUserUseCaseTestModule(): Promise<Testing
 
 export const mockChangePassswordUserParams = {
   id: '',
-  oldPassword: 'password123',
+  actualPassword: 'password123',
   newPassword: 'password1234',
 };
 
-export const mockWrongOldPasswordToChangePassswordUserParams = {
+export const mockWrongActualPasswordToChangePassswordUserParams = {
   id: '',
-  oldPassword: 'password123',
-  newPassword: 'password1234',
+  actualPassword: 'password1234',
+  newPassword: 'password123',
 };
 
 export const mockWrongNewPasswordToChangePassswordUserParams = {
   id: '',
-  oldPassword: 'password123',
+  actualPassword: 'password123',
   newPassword: 'password123',
 };
 
@@ -48,8 +48,8 @@ export const mockUserFindById = new User({
   isPrivate: false,
 });
 
-export const mockOldPasswordErrorWhileChangePasswordUserResult =
-  new BadRequestException('The old password is wrong.');
+export const mockActualPasswordErrorWhileChangePasswordUserResult =
+  new BadRequestException('The actual password is wrong.');
 
 export const mockNewPasswordErrorWhileChangePasswordUserResult =
   new BadRequestException('The new password should be different.');
@@ -57,4 +57,4 @@ export const mockNewPasswordErrorWhileChangePasswordUserResult =
 export const mockGenericErrorWhileChangePasswordUserResult =
   new InternalServerErrorException('Could not update user.');
 
-export const mockUser = new User(mockUserFindById);
+export const mockUser = mockUserFindById;

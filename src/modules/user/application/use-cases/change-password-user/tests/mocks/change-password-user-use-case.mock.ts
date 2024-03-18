@@ -3,6 +3,7 @@ import { UserTypeOrmRepository } from '@modules/user/infra/repository/user.repos
 import {
   BadRequestException,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ChangePasswordUserUseCase } from '../../change-password-user.use-case';
@@ -15,12 +16,22 @@ export async function mockChangePasswordUserUseCaseTestModule(): Promise<Testing
         provide: UserTypeOrmRepository,
         useValue: {
           findById: jest.fn().mockResolvedValue(mockUserFindById),
-          update: jest.fn(),
+          update: jest
+            .fn()
+            .mockResolvedValue(mockAffectedResultAtUpdateUserRepository),
         },
       },
     ],
   }).compile();
 }
+
+export const mockUserFindById = new User({
+  name: 'Luiz Phelipe',
+  email: 'luiz.teste@teste.com',
+  phone: '77 998363649',
+  password: 'password123',
+  isPrivate: false,
+});
 
 export const mockChangePassswordUserParams = {
   id: '',
@@ -40,11 +51,11 @@ export const mockWrongNewPasswordToChangePassswordUserParams = {
   newPassword: 'password123',
 };
 
-export const mockUserFindById = new User({
+export const mockUserAfterChangePasswordResult = new User({
   name: 'Luiz Phelipe',
   email: 'luiz.teste@teste.com',
   phone: '77 998363649',
-  password: 'password123',
+  password: 'password1234',
   isPrivate: false,
 });
 
@@ -57,4 +68,19 @@ export const mockNewPasswordErrorWhileChangePasswordUserResult =
 export const mockGenericErrorWhileChangePasswordUserResult =
   new InternalServerErrorException('Could not update user.');
 
-export const mockUser = mockUserFindById;
+export const mockUserNotFoundErrorWhileChangePasswordUserResult =
+  new NotFoundException('User not found.');
+
+export const mockNotAffectedResultAtUpdateUserRepository = {
+  raw: {},
+  affected: 0,
+  generatedMaps: [],
+};
+
+export const mockAffectedResultAtUpdateUserRepository = {
+  raw: {},
+  affected: 1,
+  generatedMaps: [],
+};
+export const mockNotAffectedDuringUserUpdateProcessResult =
+  new InternalServerErrorException('Error during saving user data.');

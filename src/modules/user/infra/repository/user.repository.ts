@@ -4,19 +4,20 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { User } from '../../domain/entity/user.entity';
 
 export interface IUserRepository {
   create(user: User): Promise<User>;
 
-  update(user: User): Promise<void>;
+  update(user: User): Promise<UpdateMethodResult>;
 
   findAll(): Promise<User[]>;
 
-  findById(id: string): Promise<User>;
+  findById(id: string): Promise<User | null>;
 }
 
+class UpdateMethodResult extends UpdateResult {}
 @Injectable()
 export class UserTypeOrmRepository implements IUserRepository {
   constructor(
@@ -34,9 +35,9 @@ export class UserTypeOrmRepository implements IUserRepository {
     }
   }
 
-  async update(user: User): Promise<void> {
+  async update(user: User): Promise<UpdateMethodResult> {
     try {
-      await this.userTypeOrmRepository.update(user.id, user);
+      return await this.userTypeOrmRepository.update(user.id, user);
     } catch (error) {
       await validateUserUniqueConstraint(error);
 
@@ -48,7 +49,7 @@ export class UserTypeOrmRepository implements IUserRepository {
     return await this.userTypeOrmRepository.find();
   }
 
-  async findById(id: string): Promise<User> {
-    return await this.userTypeOrmRepository.findOneOrFail({ where: { id } });
+  async findById(id: string): Promise<User | null> {
+    return await this.userTypeOrmRepository.findOneBy({ id });
   }
 }

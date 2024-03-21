@@ -1,9 +1,11 @@
 import { User } from '@modules/user/domain/entity/user.entity';
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { compare, hash } from 'bcrypt';
 import { UserTypeOrmRepository } from '../../../infra/repository/user.repository';
 import { ChangePasswordUserUseCaseDTO } from './dto/change-password-user.dto';
 
@@ -22,7 +24,13 @@ export class ChangePasswordUserUseCase {
       throw new NotFoundException('User not found.');
     }
 
-    user.changePassword(actualPassword, newPassword);
+    const formattedNewPassword = await this.validatePassword(
+      actualPassword,
+      newPassword,
+      user.password,
+    );
+
+    user.password = formattedNewPassword;
 
     const updateUser = await this.userRepository.update(user);
 
@@ -31,5 +39,21 @@ export class ChangePasswordUserUseCase {
     }
 
     return user;
+  }
+
+  private async validatePassword(
+    actualPassword: string,
+    newPassword: string,
+    userPassword: string,
+  ) {
+    if (!(await compare(actualPassword, userPassword))) {
+      throw new BadRequestException('The actual password is wrong.');
+    }
+
+    if (await compare(newPassword, userPassword)) {
+      throw new BadRequestException('The new password should be different.');
+    }
+
+    return await hash(newPassword, 10);
   }
 }

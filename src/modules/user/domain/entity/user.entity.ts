@@ -8,8 +8,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { BadRequestException } from '@nestjs/common';
-
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -50,17 +48,5 @@ export class User {
     isPrivate: boolean;
   }) {
     Object.assign(this, props);
-  }
-
-  changePassword(actualPassword: string, newPassword: string) {
-    if (actualPassword !== this.password) {
-      throw new BadRequestException('The actual password is wrong.');
-    }
-
-    if (newPassword === this.password) {
-      throw new BadRequestException('The new password should be different.');
-    }
-
-    this.password = newPassword;
   }
 }

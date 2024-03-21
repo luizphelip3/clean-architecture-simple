@@ -6,6 +6,7 @@ import { FindAllUserUseCase } from './application/use-cases/find-all-user/find-a
 import { userRepositoryProviders } from './infra/provider/user.repository.provider';
 import { UserTypeOrmRepository } from './infra/repository/user.repository';
 import { UserController } from './presentation/controller/user.controller';
+import { FindUserUseCase } from './application/use-cases/find-user/find-user.use-case';
 
 @Module({
   imports: [DatabaseModule],
@@ -14,9 +15,10 @@ import { UserController } from './presentation/controller/user.controller';
     CreateUserUseCase,
     FindAllUserUseCase,
     ChangePasswordUserUseCase,
+    FindUserUseCase,
     UserTypeOrmRepository,
     ...userRepositoryProviders,
   ],
-  exports: [UserTypeOrmRepository],
+  exports: [UserTypeOrmRepository, FindUserUseCase],
 })
 export class UserModule {}

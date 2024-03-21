@@ -6,7 +6,7 @@ import { ValidateUserUseCase } from './application/use-cases/validate-user-use-c
 export class AuthService {
   constructor(private readonly validateUserUseCase: ValidateUserUseCase) {}
 
-  async validateUser(params: LoginDTO) {
-    await this.validateUserUseCase.execute(params);
+  async validateUser(params: LoginDTO): Promise<string> {
+    return await this.validateUserUseCase.execute(params);
   }
 }

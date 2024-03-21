@@ -1,4 +1,5 @@
 import { validateUserUniqueConstraint } from '@modules/user/application/utils/unique-constraint-validation';
+import { removeUndefinedParams } from '@modules/utils/remove-undefined-params';
 import {
   Inject,
   Injectable,
@@ -15,6 +16,8 @@ export interface IUserRepository {
   findAll(): Promise<User[]>;
 
   findById(id: string): Promise<User | null>;
+
+  findOne(params: Partial<User>): Promise<User | null>;
 }
 
 class UpdateMethodResult extends UpdateResult {}
@@ -51,5 +54,10 @@ export class UserTypeOrmRepository implements IUserRepository {
 
   async findById(id: string): Promise<User | null> {
     return await this.userTypeOrmRepository.findOneBy({ id });
+  }
+
+  async findOne(params: Partial<User>): Promise<User | null> {
+    const validParams = removeUndefinedParams(params);
+    return await this.userTypeOrmRepository.findOne({ where: validParams });
   }
 }

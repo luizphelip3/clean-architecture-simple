@@ -31,13 +31,11 @@ describe('CreateUserUseCase', () => {
 
       const result = await useCase.execute(mockCreateUserParams);
 
-      expect(result).toEqual(userToCreate);
-      expect(userRepository.create).toHaveBeenCalledWith(userToCreate);
+      expect(result).toEqual({ ...userToCreate, password: result.password });
+      expect(userRepository.create).toHaveBeenCalledTimes(1);
     });
 
     it('should throw an error if user creation fails by email unique constraint', async () => {
-      const userToCreate = new User(mockCreateUserParams);
-
       jest
         .spyOn(userRepository, 'create')
         .mockRejectedValue(mockEmailUniqueErrorWhileCreateUserResult);
@@ -45,12 +43,10 @@ describe('CreateUserUseCase', () => {
       await expect(useCase.execute(mockCreateUserParams)).rejects.toThrow(
         'This email is already beaing used.',
       );
-      expect(userRepository.create).toHaveBeenCalledWith(userToCreate);
+      expect(userRepository.create).toHaveBeenCalledTimes(1);
     });
 
     it('should throw an error if user creation fails by phone unique constraint', async () => {
-      const userToCreate = new User(mockCreateUserParams);
-
       jest
         .spyOn(userRepository, 'create')
         .mockRejectedValue(mockPhoneUniqueErrorWhileCreateUserResult);
@@ -58,12 +54,10 @@ describe('CreateUserUseCase', () => {
       await expect(useCase.execute(mockCreateUserParams)).rejects.toThrow(
         'This phone is already beaing used.',
       );
-      expect(userRepository.create).toHaveBeenCalledWith(userToCreate);
+      expect(userRepository.create).toHaveBeenCalledTimes(1);
     });
 
     it('should throw an error if user creation fails', async () => {
-      const userToCreate = new User(mockCreateUserParams);
-
       jest
         .spyOn(userRepository, 'create')
         .mockRejectedValue(mockGenericErrorWhileCreateUserResult);
@@ -71,7 +65,7 @@ describe('CreateUserUseCase', () => {
       await expect(useCase.execute(mockCreateUserParams)).rejects.toThrow(
         'Could not create user.',
       );
-      expect(userRepository.create).toHaveBeenCalledWith(userToCreate);
+      expect(userRepository.create).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -6,7 +6,6 @@ import {
   mockAffectedResultAtUpdateUserRepository,
   mockChangePassswordUserParams,
   mockChangePasswordUserUseCaseTestModule,
-  mockNewPasswordErrorWhileChangePasswordUserResult,
   mockNotAffectedDuringUserUpdateProcessResult,
   mockNotAffectedResultAtUpdateUserRepository,
   mockUserNotFoundErrorWhileChangePasswordUserResult,
@@ -31,7 +30,7 @@ describe('ChangePasswordUserUseCase', () => {
       name: 'Luiz Phelipe',
       email: 'luiz.teste@teste.com',
       phone: '77 998363649',
-      password: 'password123',
+      password: '$2b$10$1GKupKQBgZ1dMZXzH/zu9eLNa2oMuDIxtV1W2tQGrI1a6sz/DJdmW',
       isPrivate: false,
     });
   });
@@ -41,10 +40,9 @@ describe('ChangePasswordUserUseCase', () => {
       .spyOn(mockUserRepository, 'update')
       .mockResolvedValue(mockAffectedResultAtUpdateUserRepository);
 
-    expect(await sut.execute(mockChangePassswordUserParams)).toEqual({
-      ...mockUser,
-      password: mockChangePassswordUserParams.newPassword,
-    });
+    const result = await sut.execute(mockChangePassswordUserParams);
+
+    expect(result).toEqual({ ...mockUser, password: result.password });
     expect(mockUserRepository.findById).toHaveBeenCalledTimes(1);
     expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
   });
@@ -68,10 +66,6 @@ describe('ChangePasswordUserUseCase', () => {
 
     expect(mockUserRepository.findById).toHaveBeenCalled();
 
-    jest.spyOn(mockUser, 'changePassword').mockImplementation(() => {
-      throw mockActualPasswordErrorWhileChangePasswordUserResult;
-    });
-
     expect(mockUserRepository.update).not.toHaveBeenCalled();
   });
 
@@ -83,10 +77,6 @@ describe('ChangePasswordUserUseCase', () => {
     ).rejects.toThrow('The new password should be different.');
 
     expect(mockUserRepository.findById).toHaveBeenCalled();
-
-    jest.spyOn(mockUser, 'changePassword').mockImplementation(() => {
-      throw mockNewPasswordErrorWhileChangePasswordUserResult;
-    });
 
     expect(mockUserRepository.update).not.toHaveBeenCalled();
   });

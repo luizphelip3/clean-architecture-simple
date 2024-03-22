@@ -29,26 +29,26 @@ export const mockUserFindById = new User({
   name: 'Luiz Phelipe',
   email: 'luiz.teste@teste.com',
   phone: '77 998363649',
-  password: 'password123',
+  password: '$2b$10$1GKupKQBgZ1dMZXzH/zu9eLNa2oMuDIxtV1W2tQGrI1a6sz/DJdmW',
   isPrivate: false,
 });
 
 export const mockChangePassswordUserParams = {
   id: '',
-  actualPassword: 'password123',
-  newPassword: 'password1234',
+  actualPassword: 'Boasenha1234',
+  newPassword: 'Boasenha123',
 };
 
 export const mockWrongActualPasswordToChangePassswordUserParams = {
   id: '',
-  actualPassword: 'password1234',
-  newPassword: 'password123',
+  actualPassword: 'Boasenha123',
+  newPassword: 'Boasenha1234',
 };
 
 export const mockWrongNewPasswordToChangePassswordUserParams = {
   id: '',
-  actualPassword: 'password123',
-  newPassword: 'password123',
+  actualPassword: 'Boasenha1234',
+  newPassword: 'Boasenha1234',
 };
 
 export const mockUserAfterChangePasswordResult = new User({

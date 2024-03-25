@@ -1,4 +1,4 @@
-import { DatabaseModule } from '@config/database/database.module';
+import { DatabaseModule } from '@config/database';
 import { Module } from '@nestjs/common';
 import {
   ChangePasswordUserUseCase,

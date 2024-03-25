@@ -1,5 +1,5 @@
+import { randomBytes } from 'crypto';
 import * as env from 'env-var';
-import { DEFAULT_SECRET } from './env-token';
 require('dotenv').config({ path: `.env` });
 const { from } = env;
 
@@ -7,7 +7,11 @@ const envVar = from(process.env, {});
 
 export const JWT_SECRET = envVar
   .get('JWT_SECRET')
-  .default(DEFAULT_SECRET)
+  .default(
+    process.env.NODE_ENV === 'production'
+      ? randomBytes(42).toString('base64')
+      : 'default-value',
+  )
   .required()
   .asString();
 

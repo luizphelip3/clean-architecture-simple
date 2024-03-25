@@ -8,7 +8,7 @@ import {
 import { User } from '@modules/user/domain/entity/user.entity';
 import { DataSource } from 'typeorm';
 
-export const databaseProviders = [
+export const databaseProvider = [
   {
     provide: 'DATA_SOURCE',
     useFactory: async () => {
@@ -22,6 +22,7 @@ export const databaseProviders = [
         entities: [User],
         synchronize: true,
         logging: false,
+        migrations: [__dirname + './migrations/*.ts'],
       });
 
       return dataSource.initialize();

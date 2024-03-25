@@ -1,12 +1,11 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { ChangePasswordUserRequestDTO, CreateUserRequestDTO } from '..';
 import {
   ChangePasswordUserUseCase,
   CreateUserUseCase,
   FindAllUserUseCase,
-} from '../../application/use-cases/index';
-import { User } from '../../domain/entity/user.entity';
-import { ChangePasswordUserRequestDTO } from '../dto/change-password-request.dto';
-import { CreateUserRequestDTO } from '../dto/create-user-request.adapter.dto';
+} from '../../application';
+import { User } from '../../domain';
 
 @Controller('user')
 export class UserController {

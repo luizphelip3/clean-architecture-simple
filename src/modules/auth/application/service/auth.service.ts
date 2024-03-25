@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import {
   LoginDTO,
   UserPayload,
-} from './application/use-cases/validate-user-use-case/dto/auth.dto';
-import { ValidateUserUseCase } from './application/use-cases/validate-user-use-case/validate-user-use-case';
+} from '../use-cases/validate-user-use-case/dto/validate-user.dto';
+import { ValidateUserUseCase } from '../use-cases/validate-user-use-case/validate-user-use-case';
 
 @Injectable()
 export class AuthService {

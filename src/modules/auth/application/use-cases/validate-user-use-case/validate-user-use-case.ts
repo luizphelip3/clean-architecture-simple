@@ -1,8 +1,8 @@
 import {
   LoginDTO,
   UserPayload,
-} from '@modules/auth/application/use-cases/validate-user-use-case/dto/auth.dto';
-import { FindUserUseCase } from '@modules/user/application/use-cases/index';
+} from '@modules/auth/application/use-cases/validate-user-use-case/dto/validate-user.dto';
+import { FindUserUseCase } from '@modules/user/application/index';
 import { Inject, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';

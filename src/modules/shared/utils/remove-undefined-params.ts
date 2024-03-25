@@ -6,5 +6,6 @@ export function removeUndefinedParams(params: object): any {
       result[key] = params[key];
     }
   });
+
   return result;
 }

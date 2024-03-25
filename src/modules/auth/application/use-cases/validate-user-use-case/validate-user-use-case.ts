@@ -1,4 +1,7 @@
-import { LoginDTO } from '@modules/auth/application/use-cases/validate-user-use-case/dto/auth.dto';
+import {
+  LoginDTO,
+  UserPayload,
+} from '@modules/auth/application/use-cases/validate-user-use-case/dto/auth.dto';
 import { FindUserUseCase } from '@modules/user/application/use-cases/index';
 import { Inject, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -11,23 +14,23 @@ export class ValidateUserUseCase {
     private jwtService: JwtService,
   ) {}
 
-  async execute(params: LoginDTO) {
-    const findUser = await this.findUserUseCase.execute({
+  async execute(params: LoginDTO): Promise<UserPayload> {
+    const user = await this.findUserUseCase.execute({
       email: params.email,
     });
 
-    if (!findUser) {
+    if (!user) {
       throw new UnauthorizedException('Email or password invalid.');
     }
 
-    if (!(await compare(params.password, findUser.password))) {
+    if (!(await compare(params.password, user.password))) {
       throw new UnauthorizedException('Email or password invalid.');
     }
 
-    const { ...user } = findUser;
+    const { ...loggedUser } = user;
 
-    delete user.password;
+    delete loggedUser.password;
 
-    return this.jwtService.sign(user);
+    return { ...loggedUser, accessToken: this.jwtService.sign(loggedUser) };
   }
 }

@@ -5,7 +5,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Repository, UpdateResult } from 'typeorm';
+import { ObjectLiteral, Repository } from 'typeorm';
 import { User } from '../../domain/entity/user.entity';
 
 export interface IUserRepository {
@@ -20,7 +20,11 @@ export interface IUserRepository {
   findOne(params: Partial<User>): Promise<User | null>;
 }
 
-class UpdateMethodResult extends UpdateResult {}
+class UpdateMethodResult {
+  raw: any;
+  affected?: number;
+  generatedMaps: ObjectLiteral[];
+}
 @Injectable()
 export class UserTypeOrmRepository implements IUserRepository {
   constructor(

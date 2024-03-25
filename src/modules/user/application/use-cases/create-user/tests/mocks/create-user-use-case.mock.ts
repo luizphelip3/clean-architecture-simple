@@ -1,4 +1,4 @@
-import { UserTypeOrmRepository } from '@modules/user/infra/repository/user.repository';
+import { UserTypeOrmRepository } from '@modules/user/domain/repository/user.repository';
 import {
   BadRequestException,
   InternalServerErrorException,

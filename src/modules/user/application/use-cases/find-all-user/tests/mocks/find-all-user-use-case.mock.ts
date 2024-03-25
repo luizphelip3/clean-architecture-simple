@@ -1,4 +1,4 @@
-import { UserTypeOrmRepository } from '@modules/user/infra/repository/user.repository';
+import { UserTypeOrmRepository } from '@modules/user/domain/repository/user.repository';
 import { Test, TestingModule } from '@nestjs/testing';
 import { FindAllUserUseCase } from '../../find-all-user.use-case';
 

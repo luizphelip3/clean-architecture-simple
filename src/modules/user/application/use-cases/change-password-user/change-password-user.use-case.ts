@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
-import { UserTypeOrmRepository } from '../../../infra/repository/user.repository';
+import { UserTypeOrmRepository } from '../../../domain/repository/user.repository';
 import { ChangePasswordUserUseCaseDTO } from './dto/change-password-user.dto';
 
 @Injectable()

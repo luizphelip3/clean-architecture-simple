@@ -1,4 +1,4 @@
-import { validateUserUniqueConstraint } from '@modules/user/application/utils/unique-constraint-validation';
+import { validateUserUniqueConstraint } from '@modules/user/domain/utils/unique-constraint-validation';
 import { removeUndefinedParams } from '@modules/utils/remove-undefined-params';
 import {
   Inject,
@@ -6,7 +6,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { ObjectLiteral, Repository } from 'typeorm';
-import { User } from '../../domain/entity/user.entity';
+import { User } from '../entity/user.entity';
 
 export interface IUserRepository {
   create(user: User): Promise<User>;

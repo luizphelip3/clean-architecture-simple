@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UserTypeOrmRepository } from '../../../infra/repository/user.repository';
+import { UserTypeOrmRepository } from '../../../domain/repository/user.repository';
 
 @Injectable()
 export class FindAllUserUseCase {

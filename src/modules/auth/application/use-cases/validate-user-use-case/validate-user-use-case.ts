@@ -1,5 +1,5 @@
 import { LoginDTO } from '@modules/auth/application/use-cases/validate-user-use-case/dto/auth.dto';
-import { FindUserUseCase } from '@modules/user/application/use-cases/find-user/find-user.use-case';
+import { FindUserUseCase } from '@modules/user/application/use-cases/index';
 import { Inject, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';

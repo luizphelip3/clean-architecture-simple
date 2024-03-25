@@ -1,5 +1,5 @@
 import { User } from '@modules/user/domain/entity/user.entity';
-import { UserTypeOrmRepository } from '@modules/user/infra/repository/user.repository';
+import { UserTypeOrmRepository } from '@modules/user/domain/repository/user.repository';
 import { CreateUserUseCase } from '../create-user.use-case';
 import {
   mockCreateUserParams,

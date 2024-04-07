@@ -21,6 +21,7 @@ export class ChangePasswordUserUseCase {
     const user = await this.userRepository.findById(id);
 
     if (!user) {
+      console.log('Nao tem usuario');
       throw new NotFoundException('User not found.');
     }
 
@@ -35,6 +36,7 @@ export class ChangePasswordUserUseCase {
     const updateUser = await this.userRepository.update(user);
 
     if (updateUser.affected === 0) {
+      console.log('Nao afetou nada');
       throw new InternalServerErrorException('Error during saving user data.');
     }
 

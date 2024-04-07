@@ -11,7 +11,7 @@ export class ValidateUserUseCase {
   constructor(
     @Inject(FindUserUseCase)
     private readonly findUserUseCase: FindUserUseCase,
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async execute(params: LoginDTO): Promise<UserPayload> {

@@ -25,6 +25,7 @@ class UpdateMethodResult {
   affected?: number;
   generatedMaps: ObjectLiteral[];
 }
+
 @Injectable()
 export class UserTypeOrmRepository implements IUserRepository {
   constructor(

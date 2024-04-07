@@ -15,7 +15,7 @@ export class UserController {
     private readonly changePasswordUserUseCase: ChangePasswordUserUseCase,
   ) {}
 
-  @Post()
+  @Post('/register')
   create(@Body() createUserDto: CreateUserRequestDTO): Promise<User> {
     return this.createUserUseCase.execute(createUserDto);
   }

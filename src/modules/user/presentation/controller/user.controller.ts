@@ -6,6 +6,7 @@ import {
   FindAllUserUseCase,
 } from '../../application';
 import { User } from '../../domain';
+import { IsPublic } from '@modules/auth/presentation/decorators/is-public.decorator';
 
 @Controller('user')
 export class UserController {
@@ -15,6 +16,7 @@ export class UserController {
     private readonly changePasswordUserUseCase: ChangePasswordUserUseCase,
   ) {}
 
+  @IsPublic()
   @Post('/register')
   create(@Body() createUserDto: CreateUserRequestDTO): Promise<User> {
     return this.createUserUseCase.execute(createUserDto);

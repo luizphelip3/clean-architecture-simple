@@ -1,7 +1,7 @@
 import { LocalGuard } from '@modules/auth/domain/guards';
-import { IsPublic } from '@modules/shared';
 import { Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
+import { IsPublic } from '../decorators/is-public.decorator';
 
 @Controller('auth')
 export class AuthController {

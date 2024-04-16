@@ -22,7 +22,7 @@ export const databaseProvider = [
         database: DB_PGSQL_NAME,
         entities: [User, Publication],
         synchronize: true,
-        logging: true,
+        logging: false,
         migrations: [__dirname + './migrations/*.ts'],
         migrationsTableName: 'migrations',
         ssl: false,

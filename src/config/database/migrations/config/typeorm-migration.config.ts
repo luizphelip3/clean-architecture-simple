@@ -23,5 +23,5 @@ export default new DataSource({
   },
   ssl: false,
   synchronize: false,
-  logging: true,
+  logging: false,
 });

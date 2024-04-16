@@ -5,7 +5,7 @@ import {
   DB_PGSQL_PORT,
   DB_PGSQL_USERNAME,
 } from '@config/env/env.config';
-import { Publication } from '@modules/post/domain';
+import { Publication } from '@modules/publication/domain';
 import { User } from '@modules/user/domain/entity/user.entity';
 import { DataSource } from 'typeorm';
 
@@ -22,12 +22,10 @@ export const databaseProvider = [
         database: DB_PGSQL_NAME,
         entities: [User, Publication],
         synchronize: true,
-        logging: false,
+        logging: true,
         migrations: [__dirname + './migrations/*.ts'],
         migrationsTableName: 'migrations',
-        ssl: {
-          rejectUnauthorized: false,
-        },
+        ssl: false,
       });
 
       return dataSource.initialize();

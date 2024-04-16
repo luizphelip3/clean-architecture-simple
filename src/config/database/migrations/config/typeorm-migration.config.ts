@@ -5,7 +5,7 @@ import {
   DB_PGSQL_PORT,
   DB_PGSQL_USERNAME,
 } from '@config/env/env.config';
-import { Publication } from '@modules/post/domain';
+import { Publication } from '@modules/publication/domain';
 import { User } from '@modules/user/domain/entity/user.entity';
 import { DataSource } from 'typeorm';
 

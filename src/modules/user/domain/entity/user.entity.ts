@@ -1,9 +1,11 @@
+import { Publication } from '@modules/publication/domain';
 import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -49,4 +51,7 @@ export class User {
   }) {
     Object.assign(this, props);
   }
+
+  @OneToMany(() => Publication, (publication) => publication.user)
+  publication?: Publication[];
 }

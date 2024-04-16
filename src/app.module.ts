@@ -1,6 +1,6 @@
 import { AuthModule } from '@modules/auth/auth.module';
 import { JwtAuthGuard } from '@modules/auth/domain/guards/jwt/jwt.guard';
-import { PublicationModule } from '@modules/post/publication.module';
+import { PublicationModule } from '@modules/publication/publication.module';
 import { UserModule } from '@modules/user/user.module';
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
